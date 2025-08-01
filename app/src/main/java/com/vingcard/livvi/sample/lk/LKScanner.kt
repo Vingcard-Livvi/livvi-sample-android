@@ -120,9 +120,13 @@ class LKScanner(context: Context): LKReachableDeviceListener, ScanLockCallback, 
      */
     private fun _notifyListeners() = runBlocking {
         _mutex.withLock {
-            for (listener in _listeners) {
+            // Create copies of both collections to avoid ConcurrentModificationException
+            val devicesCopy = visibleDevices.toList()
+            val listenersCopy = _listeners.toList()
+
+            for (listener in listenersCopy) {
                 Log.d("Scanner", "Notifying ${listener.javaClass} about visible devices.")
-                listener.didUpdateVisible(visibleDevices)
+                listener.didUpdateVisible(devicesCopy)
             }
         }
     }

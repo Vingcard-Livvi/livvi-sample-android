@@ -12,20 +12,25 @@ If you're interested in learning more, reach out to support.livvi@vingcard.com.
 
 ## Getting Started
 
-**You will find two samples under this directory, one with Jetpack Compose (placed at ComposableSample) and one with standard activity (placed under Sample).**
+Since the Livvi platform supports both Livvi and TTLock locks, this sample project offers an implementation
+that will work for both types of locks.
+
+This repository doesn't include the Livvi SDK, as it is a proprietary library. To use this sample project, you will need to
+obtain the Livvi SDK from Vingcard. The SDK is available as an AAR file **lklib.aar** which must be placed in the
+app/libs directory of your Android project.
 
 To be able to scan to locks and unlock them, some files are necessary.
 
-1. Copy the entire folder **Composable Sample > app > libs to your Project > App destination**;
-2. Copy the entire folder **Composable Sample > app > src > main > java > br > com > livvi > sample lk, to your Project > App > src folder**;
-3. Open the class copied to your project and fix the Package Structure;
-4. At your build.gradle placed at the root of the project(It's NOT the one placed under app folder),
+1. Place the provided file **lklib.aar** in app > libs and copy the entire folder **app > libs to your Project > App destination**;
+2. Copy the entire folder **app > src > main > java > com > vingcard > livvi > sample > lk, to your Project > App > src folder**;
+3. Open the classes copied to your project and fix the Package Structure;
+4. On your build.gradle placed at the root of the project(It's NOT the one placed under app folder),
 paste the content below or adapt the existing one to avoid problems with version mismatch of Kotlin plugin:
 
 ```groovy
 buildscript {
     ext {
-        kotlin_version = '1.7.10'
+        kotlin_version = '2.1.0'
     }
 
     dependencies {
@@ -35,40 +40,52 @@ buildscript {
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    id 'com.android.application' version '7.2.2' apply false
-    id 'com.android.library' version '7.2.2' apply false
-    id 'org.jetbrains.kotlin.android' version '1.5.31' apply false
+    id 'com.android.application' version '8.12.0' apply false
+    id 'com.android.library' version '8.12.0' apply false
+    id 'org.jetbrains.kotlin.android' version "$kotlin_version" apply false
+    id 'org.jetbrains.kotlin.plugin.compose' version "$kotlin_version" apply false
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+tasks.register('clean', Delete) {
+    delete layout.buildDirectory
 }
 ```
 
 5. At build.gradle placed under the app directory add the following:
 ```groovy
+android {
+    // ...
+    compileOptions {
+        // ...
+        // Desugaring is needed for Java 8+ APIs used by Livvi
+        coreLibraryDesugaringEnabled true
+    }
+}
+
 dependencies {
     // Livvi Mandatory Dependencies
-    // Please, does not change this version of codec. All subsequent versions removes some important methods.
-    implementation 'commons-codec:commons-codec:1.15'
-    implementation 'com.google.code.gson:gson:2.10'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
-    implementation "com.squareup.moshi:moshi-kotlin:1.13.0"
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
-    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
+
+    implementation 'commons-codec:commons-codec:1.19.0'
+    implementation 'com.google.code.gson:gson:2.13.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2'
+    implementation "com.squareup.moshi:moshi-kotlin:1.15.2"
+    implementation 'com.squareup.retrofit2:retrofit:3.0.0'
+    implementation "com.squareup.retrofit2:converter-moshi:3.0.0"
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.1.0'
     // Responsible to load the /libs directory under the classpath of the application.
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+    // End of Livvi Mandatory Dependencies
 }
 ```
 
-6. At your AndroidManifest.xml file, add the permissions:
+6. At your AndroidManifest.xml file, make sure you have the permissions:
 
 ``` xml
     <!-- Location Setup -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    
+
     <!-- BLE Setup -->
     <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
     <!-- Request legacy Bluetooth permissions on older devices. -->
@@ -81,7 +98,7 @@ dependencies {
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
 ```
 
-## Controling the Lockers
+## Controlling the Locks
 
 1. In order to scan for devices, your class will need to implement the LKScannerProtocol, for example:
 
@@ -123,7 +140,7 @@ After Android S
 ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, BLUETOOTH_SCAN, BLUETOOTH_CONNECT
 ```
 
-The permissions can be requested by using the snipper below and you can change it accordingly to your needs.
+The permissions can be requested by using the snippet below and you can change it accordingly to your needs.
 
 ```kotlin
 private fun _requireBluetoothAndLocationPermissionsIfNecessary() {

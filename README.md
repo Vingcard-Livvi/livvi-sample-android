@@ -30,7 +30,7 @@ paste the content below or adapt the existing one to avoid problems with version
 ```groovy
 buildscript {
     ext {
-        kotlin_version = '2.1.0'
+        kotlin_version = '2.2.0'
     }
 
     dependencies {
@@ -40,8 +40,8 @@ buildscript {
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    id 'com.android.application' version '8.12.0' apply false
-    id 'com.android.library' version '8.12.0' apply false
+    id 'com.android.application' version '8.13.2' apply false
+    id 'com.android.library' version '8.13.2' apply false
     id 'org.jetbrains.kotlin.android' version "$kotlin_version" apply false
     id 'org.jetbrains.kotlin.plugin.compose' version "$kotlin_version" apply false
 }
@@ -51,10 +51,20 @@ tasks.register('clean', Delete) {
 }
 ```
 
-5. At build.gradle placed under the app directory add the following:
+5. At settings.gradle, add the plugin below:
+```groovy
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.10.0'
+}
+```
+
+6. At build.gradle placed under the app directory add the following:
 ```groovy
 android {
     // ...
+    compileSdkVersion 37
+    minSdkVersion 31
+    targetSdk 36
     compileOptions {
         // ...
         // Desugaring is needed for Java 8+ APIs used by Livvi
@@ -76,7 +86,7 @@ dependencies {
 }
 ```
 
-6. At your AndroidManifest.xml file, make sure you have the permissions:
+7. At your AndroidManifest.xml file, make sure you have the permissions:
 
 ``` xml
     <!-- Location Setup -->

@@ -2,11 +2,11 @@ package com.vingcard.livvi.sample.lk
 
 import android.content.Context
 import android.util.Log
-import com.vingcard.livvi.lklib.LKLib
-import com.vingcard.livvi.lklib.core.LKReachableDevice
-import com.vingcard.livvi.lklib.core.LKReachableDeviceImpl
-import com.vingcard.livvi.lklib.core.LKReachableDeviceListener
-import com.vingcard.livvi.lklib.entity.LKCommDevice
+import br.com.loopkey.indigo.lklib.LKLib
+import br.com.loopkey.indigo.lklib.core.LKReachableDevice
+import br.com.loopkey.indigo.lklib.core.LKReachableDeviceImpl
+import br.com.loopkey.indigo.lklib.core.LKReachableDeviceListener
+import br.com.loopkey.indigo.lklib.entity.LKCommDevice
 import com.ttlock.bl.sdk.api.ExtendedBluetoothDevice
 import com.ttlock.bl.sdk.api.TTLockClient
 import com.ttlock.bl.sdk.callback.ScanLockCallback

@@ -9,8 +9,8 @@ android {
 
     defaultConfig {
         applicationId "com.vingcard.livvi.sample"
-        compileSdkVersion 36
-        minSdkVersion 34
+        compileSdkVersion 37
+        minSdkVersion 31
         targetSdk 36
         versionCode 1
         versionName "1.0"

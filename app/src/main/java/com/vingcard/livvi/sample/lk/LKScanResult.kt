@@ -1,6 +1,6 @@
 package com.vingcard.livvi.sample.lk
 
-import com.vingcard.livvi.lklib.entity.LKCommDevice
+import br.com.loopkey.indigo.lklib.entity.LKCommDevice
 import com.ttlock.bl.sdk.api.ExtendedBluetoothDevice
 import org.apache.commons.codec.binary.Base32
 

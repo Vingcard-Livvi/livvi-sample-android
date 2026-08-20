@@ -1,11 +1,10 @@
 package com.vingcard.livvi.sample.lk
 
-import android.content.Context
 import android.util.Base64
-import com.vingcard.livvi.lklib.commands.LKCommand
-import com.vingcard.livvi.lklib.commands.LKCommandRepository
-import com.vingcard.livvi.lklib.commands.LKCommandRunner
-import com.vingcard.livvi.lklib.commands.implementations.LKUnlockCommand
+import br.com.loopkey.indigo.lklib.commands.LKCommand
+import br.com.loopkey.indigo.lklib.commands.LKCommandRepository
+import br.com.loopkey.indigo.lklib.commands.LKCommandRunner
+import br.com.loopkey.indigo.lklib.commands.implementations.LKUnlockCommand
 import com.ttlock.bl.sdk.api.TTLockClient
 import com.ttlock.bl.sdk.callback.ControlLockCallback
 import com.ttlock.bl.sdk.constant.ControlAction
